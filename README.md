@@ -2,14 +2,15 @@
 
 Code and demo for our paper [Selective Text Augmentation with Word Roles for Low-Resource Text Classification](https://arxiv.org/abs/2209.01560)。
 
-![sta-process](images/sta-process.pnd)
+![sta-process](images/sta-process.png)
 
 Abstract:
 Data augmentation techniques are widely used in text classification tasks to improve the performance of classifiers, especially in low-resource scenarios. Most previous methods conduct text augmentation without considering the different functionalities of the words in the text, which may generate unsatisfactory samples. Different words may play different roles in text classification, which inspires us to strategically select the proper roles for text augmentation. In this work, we first identify the relationships between the words in a text and the text category from the perspectives of statistical correlation and semantic similarity and then utilize them to divide the words into four roles -- Gold, Venture, Bonus, and Trivial words, which have different functionalities for text classification. Based on these word roles, we present a new augmentation technique called STA (Selective Text Augmentation) where different text-editing operations are selectively applied to words with specific roles. STA can generate diverse and relatively clean samples, while preserving the original core semantics, and is also quite simple to implement. Extensive experiments on 5 benchmark low-resource text classification datasets illustrate that augmented samples produced by STA successfully boost the performance of classification models which significantly outperforms previous non-selective methods, including two large language model-based techniques. Cross-dataset experiments further indicate that STA can help the classifiers generalize better to other datasets than previous methods.
 
 ---
+# How to use
 
-# Extracting the `Word Roles`
+## Extracting the `Word Roles`
 Extracting the word roles:
 ```python
 from keywords_extractor import KeywordsExtractor
@@ -31,7 +32,7 @@ iw (Trivial): ['had', 'his', 'singer', 'Sunday', 'rights', 'third', 'side', 'act
 ```
 
 
-# Text-editing-based Augmentation
+## Text-editing-based Augmentation
 ```python
 from text_augmenter import TextAugmenter
 TA = TextAugmenter(lang='en')
@@ -46,7 +47,7 @@ The `TextAugmenter` class provides unified APIs for common text-editing operatio
 
 Apart from `.aug_by_selection()`, all methods can specify `mode='random'` or `mode='selective'` to choose whether to use "random" augmentation or "selective" augmentation (our proposed method).
 
-Let's we want to augment the sentence, which is labeled as "business":
+Let's say we want to augment the sentence, which is labeled as "business":
 ```python
 sentence = "Bank of America has been banned from suing Parmalat, the food group which went bust in 2003 after an accounting scandal"
 category = "business"
@@ -90,7 +91,7 @@ Compared with **random text augmentation**,  **selective text augmentation** can
 - 1) Important class-indicating words may be altered, resulting in some damage to the original meaning or even changing the label of the original text;
 - 2) Unimportant words, noisy words or misleading words may be enhanced after augmentation, which may hurt the generalization ability.
 
-3. **Selective text augmentation with word roles (Our proposed STA)**
+### 3. **Selective text augmentation with word roles (Our proposed STA)**
 Specifying the words for text-editing one sample after one sample is burdensome, our proposed `Word Roles` is here to help us *automatically* choose the words for augmentation.
 
 By identifying the four different word roles (Gold, Venture, Bonus, and Trivial), we can specify certain roles for each augmentation operation, to generate diverse and relatively clean samples, while preserving the original core semantics.
